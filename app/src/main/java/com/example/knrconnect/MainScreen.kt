@@ -11,10 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 
 @Composable
@@ -38,14 +41,14 @@ fun BusinessListItem(businessName:String, category: String ) {
        }
     }
 }
-@Preview(showBackground = true)
 @Composable
-fun BusinessList() {
+fun BusinessList(businesses: List<Business>) {
+
     LazyColumn {
-        items(30) { index ->
+        items(businesses) { business ->
             BusinessListItem(
-                businessName = "Business #${index + 1}",
-                category = "Category type ${index % 3 + 1}"
+                businessName = business.name,
+                category = business.category
             )
         }
     }
@@ -62,14 +65,16 @@ fun TopBar() {
     )
 }
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainViewModel) {
+    val businesses by viewModel.businesses.collectAsState()
     Scaffold(
         topBar = { TopBar() }
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            BusinessList()
+            BusinessList(businesses = businesses)
+
         }
     }
 }
