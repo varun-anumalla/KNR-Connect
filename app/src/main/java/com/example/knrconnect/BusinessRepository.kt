@@ -7,7 +7,7 @@ class BusinessRepository(private val dao: BusinessDao) {
     fun getAllBusinesses(): Flow<List<Business>> {
         return dao.getAllBusinesses()
     }
-
+    // Fetches fresh data from the network and saves it to the local database
     suspend fun refreshBusinesses(apiUrl: String) {
         try {
             val networkBusinesses = RetrofitInstance.api.getBusinesses(apiUrl)
