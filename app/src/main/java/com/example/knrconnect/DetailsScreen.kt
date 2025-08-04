@@ -22,63 +22,60 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
     val business by viewModel.business.collectAsState()
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = { TopBar() } //  consistent TopBar from CommonUi.kt
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp)
-        ) {
-            business?.let { b ->
-                // Row for Name and Favorite
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = b.name,
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f) // Name takes up available space
-                    )
-                    IconButton(onClick = { viewModel.toggleFavorite() }) {
-                        Icon(
-                            imageVector = if (b.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorite",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Address Section
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        business?.let { b ->
+            //row for name and favorite button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = "Address",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = b.address,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Map Link Section
-                Text(
-                    text = "Get Directions",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = b.name,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(b.mapLink))
-                        context.startActivity(intent)
-                    }
+                    modifier = Modifier.weight(1f)
                 )
+                IconButton(onClick = { viewModel.toggleFavorite() }) {
+                    Icon(
+                        imageVector = if (b.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //address section
+
+            Text(
+                text = "Address",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = b.address,
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //maplink section
+            Text(
+                text = "Get Directions",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(b.mapLink))
+                    context.startActivity(intent)
+                }
+            )
         }
     }
 }

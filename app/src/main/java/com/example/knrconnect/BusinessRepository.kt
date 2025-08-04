@@ -8,21 +8,24 @@ class BusinessRepository(private val dao: BusinessDao) {
         return dao.getAllBusinesses()
     }
 
-    suspend fun refreshBusinesses(apiUrl: String): List<Business> {
-        var networkBusinesses: List<Business> = emptyList()
+    suspend fun refreshBusinesses(apiUrl: String) {
         try {
-            networkBusinesses = RetrofitInstance.api.getBusinesses(apiUrl)
+            val networkBusinesses = RetrofitInstance.api.getBusinesses(apiUrl)
             dao.insertAll(networkBusinesses)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return networkBusinesses
     }
+
     fun getBusinessByName(name: String): Flow<Business?> {
         return dao.getBusinessByName(name)
     }
 
     suspend fun setFavorite(name: String, isFavorite: Boolean) {
         dao.setFavorite(name, isFavorite)
+    }
+
+    fun getFavoriteBusinesses(): Flow<List<Business>> {
+        return dao.getFavoriteBusinesses()
     }
 }

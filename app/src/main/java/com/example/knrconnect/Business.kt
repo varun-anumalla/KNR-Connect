@@ -2,12 +2,29 @@ package com.example.knrconnect
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+
+// This class is needed to tell Room how to save a List of Strings
+class Converters {
+    @TypeConverter
+    fun fromString(value: String): List<String> {
+        return value.split(",").map { it.trim() }
+    }
+
+    @TypeConverter
+    fun fromList(list: List<String>): String {
+        return list.joinToString(",")
+    }
+}
 
 @Entity(tableName = "businesses")
+@TypeConverters(Converters::class) // Tell Room to use our new converter
 data class Business(
     @PrimaryKey val name: String,
     val category: String,
     val address: String,
     val mapLink: String,
+    val tags: List<String>, //  list of hidden keywords
     var isFavorite: Boolean = false
 )

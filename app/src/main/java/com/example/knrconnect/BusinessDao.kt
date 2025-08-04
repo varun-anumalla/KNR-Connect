@@ -19,4 +19,7 @@ interface BusinessDao {
 
     @Query("UPDATE businesses SET isFavorite = :isFavorite WHERE name = :name")
     suspend fun setFavorite(name: String, isFavorite: Boolean)
+
+    @Query("SELECT * FROM businesses WHERE isFavorite = 1")
+    fun getFavoriteBusinesses(): Flow<List<Business>>
 }
