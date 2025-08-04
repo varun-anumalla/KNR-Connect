@@ -45,6 +45,7 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
         _searchQuery.value = query
     }
 
+    // Triggers the  network request to refresh the local database
     private fun fetchBusinesses() {
         viewModelScope.launch {
             _isLoading.value = true
