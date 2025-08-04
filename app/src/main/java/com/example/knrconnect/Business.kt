@@ -1,4 +1,13 @@
 package com.example.knrconnect
 
-data class Business(val name: String, val category: String)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "businesses")
+data class Business(
+    @PrimaryKey val name: String,
+    val category: String,
+    val address: String,
+    val mapLink: String,
+    var isFavorite: Boolean = false
+)

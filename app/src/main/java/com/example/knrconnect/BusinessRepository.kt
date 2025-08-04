@@ -1,17 +1,28 @@
 package com.example.knrconnect
 
-class BusinessRepository {
+import kotlinx.coroutines.flow.Flow
 
-    private var businessList: List<Business> = emptyList()
+class BusinessRepository(private val dao: BusinessDao) {
 
-    suspend fun getBusinesses(apiUrl: String): List<Business> {
-        if (businessList.isEmpty()) {
-            businessList = RetrofitInstance.api.getBusinesses(apiUrl)
-        }
-        return businessList
+    fun getAllBusinesses(): Flow<List<Business>> {
+        return dao.getAllBusinesses()
     }
 
-    fun getBusinessByName(name: String): Business? {
-        return businessList.find { it.name == name }
+    suspend fun refreshBusinesses(apiUrl: String): List<Business> {
+        var networkBusinesses: List<Business> = emptyList()
+        try {
+            networkBusinesses = RetrofitInstance.api.getBusinesses(apiUrl)
+            dao.insertAll(networkBusinesses)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return networkBusinesses
+    }
+    fun getBusinessByName(name: String): Flow<Business?> {
+        return dao.getBusinessByName(name)
+    }
+
+    suspend fun setFavorite(name: String, isFavorite: Boolean) {
+        dao.setFavorite(name, isFavorite)
     }
 }

@@ -14,11 +14,12 @@ import com.example.knrconnect.ui.theme.KNRConnectTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val repository = BusinessRepository()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val database = AppDatabase.getInstance(applicationContext)
+            val repository = BusinessRepository(database.businessDao())
+
             KNRConnectTheme {
                 val navController = rememberNavController()
 
@@ -35,15 +36,14 @@ class MainActivity : ComponentActivity() {
                         )
                         MainScreen(
                             viewModel = viewModel,
-                            onItemClick = {
-                                navController.navigate("details/${it.name}/${it.category}")
+                            onItemClick = { business ->
+                                navController.navigate("details/${business.name}")
                             }
                         )
                     }
 
-                    // Details Screen Route
                     composable(
-                        route = "details/{businessName}/{businessCategory}",
+                        route = "details/{businessName}",
                     ) { backStackEntry ->
                         val businessName = backStackEntry.arguments?.getString("businessName") ?: ""
 
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             }
                         )
 
-                        LaunchedEffect(key1 = Unit) {
+                        LaunchedEffect(key1 = businessName) {
                             viewModel.loadBusiness(businessName)
                         }
 
