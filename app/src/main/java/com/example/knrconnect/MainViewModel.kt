@@ -35,7 +35,7 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
 
-    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/a2abca76f2ab7c9fcc054b550a1096e8af29d1ca/knr-data.json"
+        private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/328ff06d9cbb3fc8ea3466ae268c7dd9161ce5ff/knr-data.json"
 
     init {
         fetchBusinesses()
