@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BusinessDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(business: Business)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(businesses: List<Business>)
 

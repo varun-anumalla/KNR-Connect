@@ -1,40 +1,43 @@
+
 package com.example.knrconnect
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    settingsViewModel: SettingsViewModel,
+    themeViewModel: ThemeViewModel
+) {
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
     Column(modifier = Modifier.padding(16.dp)) {
-        // Dark Mode Toggle (UI only)
+        // Dark Mode Toggle
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Dark Mode", modifier = Modifier.weight(1f))
-            Switch(checked = false, onCheckedChange = {})
+            Text("Dark Mode", style = MaterialTheme.typography.bodyLarge)
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = { themeViewModel.toggleTheme() }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
         Divider()
         Spacer(modifier = Modifier.height(16.dp))
 
-        //  Favorites Button (UI only)
-        Button(onClick = { /* Logic to be added later */ }) {
+        // Clear Favorites Button
+        Button(onClick = { settingsViewModel.clearFavorites() }) {
             Text("Clear All Favorites")
         }
 
@@ -48,7 +51,7 @@ fun SettingsScreen() {
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
-        Text(text = "KNR Connect - Version 1.0")
+        Text(text = "KNR Connect - Version 1.0.1")
         Text(text = "Developed by Varun Anumalla")
     }
 }

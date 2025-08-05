@@ -1,8 +1,10 @@
 package com.example.knrconnect
 
 import kotlinx.coroutines.flow.Flow
-
 class BusinessRepository(private val dao: BusinessDao) {
+    suspend fun clearFavorites() {
+        dao.run { clearFavorites() }
+    }
 
     fun getAllBusinesses(): Flow<List<Business>> {
         return dao.getAllBusinesses()

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -28,18 +29,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val database = AppDatabase.getInstance(applicationContext)
-            val repository = BusinessRepository(database.businessDao())
+            // Create a single instance of the ThemeViewModel for the whole app
+            val themeViewModel: ThemeViewModel = viewModel()
+            val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
-            KNRConnectTheme {
-                AppShell(repository = repository)
+            // Pass the theme state to our KNRConnectTheme
+            KNRConnectTheme(darkTheme = isDarkTheme) {
+                val database = AppDatabase.getInstance(applicationContext)
+                val repository = BusinessRepository(database.businessDao())
+                AppShell(repository = repository, themeViewModel = themeViewModel)
             }
         }
     }
 }
 
 @Composable
-fun AppShell(repository: BusinessRepository) {
+fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
     val navController = rememberNavController()
     val navItems = listOf(
         NavItem("home", Icons.Default.Home, "Home"),
@@ -121,7 +126,18 @@ fun AppShell(repository: BusinessRepository) {
             }
 
             composable("settings") {
-                SettingsScreen()
+                val settingsViewModel: SettingsViewModel = viewModel(
+                    factory = object : ViewModelProvider.Factory {
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                            return SettingsViewModel(repository) as T
+                        }
+                    }
+                )
+                // Pass both ViewModels to the SettingsScreen
+                SettingsScreen(
+                    settingsViewModel = settingsViewModel,
+                    themeViewModel = themeViewModel
+                )
             }
         }
     }
