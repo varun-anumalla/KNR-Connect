@@ -4,9 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 class BusinessRepository(private val dao: BusinessDao) {
 
-    fun getAllBusinesses(): Flow<List<Business>> {
-        return dao.getAllBusinesses()
-    }
+    fun getAllBusinesses(): Flow<List<Business>> = dao.getAllBusinesses()
 
     suspend fun refreshBusinesses(apiUrl: String) {
         try {
@@ -17,20 +15,11 @@ class BusinessRepository(private val dao: BusinessDao) {
         }
     }
 
-    fun getBusinessByName(name: String): Flow<Business?> {
-        return dao.getBusinessByName(name)
-    }
+    fun getBusinessByName(name: String): Flow<Business?> = dao.getBusinessByName(name)
 
-    suspend fun setFavorite(name: String, isFavorite: Boolean) {
-        dao.setFavorite(name, isFavorite)
-    }
+    suspend fun setFavorite(name: String, isFavorite: Boolean) = dao.setFavorite(name, isFavorite)
 
-    fun getFavoriteBusinesses(): Flow<List<Business>> {
-        return dao.getFavoriteBusinesses()
-    }
+    fun getFavoriteBusinesses(): Flow<List<Business>> = dao.getFavoriteBusinesses()
 
-    // this function calls the DAO to clear the favorites
-    suspend fun clearFavorites() {
-        dao.clearFavorites()
-    }
+    suspend fun clearFavorites() = dao.clearFavorites()
 }

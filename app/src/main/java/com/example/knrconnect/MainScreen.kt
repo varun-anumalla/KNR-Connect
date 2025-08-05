@@ -28,7 +28,7 @@ fun MainScreen(viewModel: MainViewModel, onItemClick: (Business) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Styled Search Bar
+        // Search Bar
         TextField(
             value = searchQuery,
             onValueChange = { viewModel.onSearchQueryChanged(it) },

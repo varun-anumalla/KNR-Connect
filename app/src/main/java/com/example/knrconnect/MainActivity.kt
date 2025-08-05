@@ -29,11 +29,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Create a single instance of the ThemeViewModel for the whole app
             val themeViewModel: ThemeViewModel = viewModel()
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
-            // Pass the theme state to our KNRConnectTheme
             KNRConnectTheme(darkTheme = isDarkTheme) {
                 val database = AppDatabase.getInstance(applicationContext)
                 val repository = BusinessRepository(database.businessDao())
@@ -133,7 +131,6 @@ fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
                         }
                     }
                 )
-                // Pass both ViewModels to the SettingsScreen
                 SettingsScreen(
                     settingsViewModel = settingsViewModel,
                     themeViewModel = themeViewModel

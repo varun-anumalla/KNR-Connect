@@ -1,4 +1,3 @@
-
 package com.example.knrconnect
 
 import androidx.compose.foundation.layout.*
@@ -36,7 +35,7 @@ fun SettingsScreen(
         Divider()
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Clear Favorites Button
+        // Clear all Favorites Button
         Button(onClick = { settingsViewModel.clearFavorites() }) {
             Text("Clear All Favorites")
         }

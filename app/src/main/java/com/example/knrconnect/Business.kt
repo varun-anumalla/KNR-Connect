@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
-// This class is needed to tell Room how to save a List of Strings
 class Converters {
     @TypeConverter
     fun fromString(value: String): List<String> {
