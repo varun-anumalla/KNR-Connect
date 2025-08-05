@@ -28,7 +28,7 @@ fun MainScreen(viewModel: MainViewModel, onItemClick: (Business) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Search Bar
+        // Styled Search Bar
         TextField(
             value = searchQuery,
             onValueChange = { viewModel.onSearchQueryChanged(it) },
@@ -44,8 +44,9 @@ fun MainScreen(viewModel: MainViewModel, onItemClick: (Business) -> Unit) {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = MaterialTheme.colorScheme.primary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedContainerColor = MaterialTheme.colorScheme.surface
+                //  provides better contrast in both light and dark themes
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
             )
         )
 

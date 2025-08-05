@@ -1,15 +1,13 @@
 package com.example.knrconnect
 
 import kotlinx.coroutines.flow.Flow
+
 class BusinessRepository(private val dao: BusinessDao) {
-    suspend fun clearFavorites() {
-        dao.run { clearFavorites() }
-    }
 
     fun getAllBusinesses(): Flow<List<Business>> {
         return dao.getAllBusinesses()
     }
-    // Fetches fresh data from the network and saves it to the local database
+
     suspend fun refreshBusinesses(apiUrl: String) {
         try {
             val networkBusinesses = RetrofitInstance.api.getBusinesses(apiUrl)
@@ -29,5 +27,10 @@ class BusinessRepository(private val dao: BusinessDao) {
 
     fun getFavoriteBusinesses(): Flow<List<Business>> {
         return dao.getFavoriteBusinesses()
+    }
+
+    // this function calls the DAO to clear the favorites
+    suspend fun clearFavorites() {
+        dao.clearFavorites()
     }
 }

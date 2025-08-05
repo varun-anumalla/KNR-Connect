@@ -8,9 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BusinessDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(business: Business)
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(businesses: List<Business>)
 
@@ -25,4 +22,8 @@ interface BusinessDao {
 
     @Query("SELECT * FROM businesses WHERE isFavorite = 1")
     fun getFavoriteBusinesses(): Flow<List<Business>>
+
+    @Query("UPDATE businesses SET isFavorite = 0 WHERE isFavorite = 1")
+    suspend fun clearFavorites()
 }
+
