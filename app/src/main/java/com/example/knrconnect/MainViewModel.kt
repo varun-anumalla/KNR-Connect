@@ -1,5 +1,6 @@
 package com.example.knrconnect
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
@@ -16,36 +17,41 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _allBusinesses = repository.getAllBusinesses()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val businesses: StateFlow<List<Business>> = repository.businesses
+        .onEach { businessList ->
 
-    val businesses: StateFlow<List<Business>> = _searchQuery
-        .combine(_allBusinesses) { query, businessList ->
+            Log.d("KNR_DEBUG_VM", "Business list received from repository with size: ${businessList.size}")
+        }
+        .combine(searchQuery) { businessList, query ->
             if (query.isBlank()) {
                 businessList
             } else {
                 businessList.filter { business ->
-                    val doesQueryMatch = business.name.contains(query, ignoreCase = true) ||
+                    business.name.contains(query, ignoreCase = true) ||
                             business.category.contains(query, ignoreCase = true) ||
                             business.tags.any { tag -> tag.contains(query, ignoreCase = true) }
-                    doesQueryMatch
                 }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-
-        private val apiUrl =  "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/328ff06d9cbb3fc8ea3466ae268c7dd9161ce5ff/knr-data.json"
+    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/d1aeeb75f6ff380378d2b95409ade3f42409d0f7/knr-data.json"
 
     init {
-        fetchBusinesses()
+        viewModelScope.launch {
+            repository.initialize()
+            fetchBusinesses()
+        }
     }
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }
 
-    // Triggers the  network request to refresh the local database
     private fun fetchBusinesses() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -53,10 +59,10 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
             try {
                 repository.refreshBusinesses(apiUrl)
             } catch (e: Exception) {
-                _error.value = "Failed to load data. Check connection."
+                _error.value = "Failed to load data."
+            } finally {
+                _isLoading.value = false
             }
-            _isLoading.value = false
         }
     }
 }
-

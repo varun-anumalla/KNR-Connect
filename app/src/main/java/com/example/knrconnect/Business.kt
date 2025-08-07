@@ -18,11 +18,12 @@ class Converters {
 }
 
 @Entity(tableName = "businesses")
-@TypeConverters(Converters::class) // Tell Room to use our new converter
+@TypeConverters(Converters::class)
 data class Business(
     @PrimaryKey val name: String,
     val category: String,
     val address: String,
+    val phone: String,
     val mapLink: String,
     val tags: List<String>, //  list of hidden keywords
     var isFavorite: Boolean = false
