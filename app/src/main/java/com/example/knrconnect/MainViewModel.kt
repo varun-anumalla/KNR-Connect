@@ -51,6 +51,9 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }
+    fun onClearSearchQuery() {
+        _searchQuery.value = ""
+    }
 
     private fun fetchBusinesses() {
         viewModelScope.launch {

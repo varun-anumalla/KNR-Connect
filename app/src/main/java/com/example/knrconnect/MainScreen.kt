@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.Close
+
 
 @Composable
 fun MainScreen(viewModel: MainViewModel, onItemClick: (Business) -> Unit) {
@@ -38,6 +40,13 @@ fun MainScreen(viewModel: MainViewModel, onItemClick: (Business) -> Unit) {
                 .shadow(elevation = 4.dp, shape = CircleShape),
             placeholder = { Text("Search...") },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { viewModel.onClearSearchQuery() }) {
+                        Icon(Icons.Default.Close, contentDescription = "Clear search")
+                    }
+                }
+            },
             shape = CircleShape,
             singleLine = true,
             colors = TextFieldDefaults.colors(

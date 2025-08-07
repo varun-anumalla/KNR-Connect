@@ -109,7 +109,7 @@ fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
                 LaunchedEffect(key1 = businessName) {
                     viewModel.loadBusiness(businessName)
                 }
-                DetailsScreen(viewModel = viewModel)
+                DetailsScreen(viewModel = viewModel, onNavigateBack = { navController.popBackStack() })
             }
 
             composable("favorites") {

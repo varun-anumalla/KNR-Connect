@@ -22,7 +22,7 @@ import com.example.knrconnect.ui.theme.Green
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(viewModel: DetailsViewModel) {
+fun DetailsScreen(viewModel: DetailsViewModel, onNavigateBack: () -> Unit) {
     val business by viewModel.business.collectAsState()
 
     Scaffold(
@@ -30,8 +30,7 @@ fun DetailsScreen(viewModel: DetailsViewModel) {
             TopAppBar(
                 title = { Text(business?.name ?: "Details") },
                 navigationIcon = {
-
-                    IconButton(onClick = { /* navController.popBackStack() */ }) {
+                    IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
