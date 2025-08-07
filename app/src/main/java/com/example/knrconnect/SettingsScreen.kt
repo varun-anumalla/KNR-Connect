@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import com.example.knrconnect.BuildConfig
 
 @Composable
 fun SettingsScreen(
@@ -50,7 +52,9 @@ fun SettingsScreen(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
-        Text(text = "KNR Connect - Version 1.0.1")
+        // This will update automatically when we update the version in build.gradle.kts
+        val version = BuildConfig.VERSION_NAME
+        Text(text = "KNR Connect - Version $version")
         Text(text = "Developed by Varun Anumalla")
     }
 }
