@@ -8,6 +8,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +26,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
 import com.example.knrconnect.ui.theme.KNRConnectTheme
 
-data class NavItem(val route: String, val icon: ImageVector, val label: String)
+data class NavItem(
+    val route: String,
+    val label: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +40,7 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = viewModel()
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
-            KNRConnectTheme(darkTheme = isDarkTheme) {
+            KNRConnectTheme(darkTheme = isDarkTheme, dynamicColor = false) {
                 val database = AppDatabase.getInstance(applicationContext)
                 val repository = BusinessRepository(database.businessDao())
                 AppShell(repository = repository, themeViewModel = themeViewModel)
@@ -45,9 +53,9 @@ class MainActivity : ComponentActivity() {
 fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
     val navController = rememberNavController()
     val navItems = listOf(
-        NavItem("home", Icons.Default.Home, "Home"),
-        NavItem("favorites", Icons.Default.Favorite, "Favorites"),
-        NavItem("settings", Icons.Default.Settings, "Settings")
+        NavItem("home", "Home", Icons.Filled.Home, Icons.Outlined.Home),
+        NavItem("favorites", "Favorites", Icons.Filled.Favorite, Icons.Outlined.FavoriteBorder),
+        NavItem("settings", "Settings", Icons.Filled.Settings, Icons.Outlined.Settings)
     )
 
     Scaffold(
@@ -58,10 +66,16 @@ fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
                 val currentDestination = navBackStackEntry?.destination
 
                 navItems.forEach { item ->
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == item.route } == true
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.label) },
+                        icon = {
+                            Icon(
+                                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.label
+                            )
+                        },
                         label = { Text(item.label) },
-                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                        selected = isSelected,
                         onClick = {
                             navController.navigate(item.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {

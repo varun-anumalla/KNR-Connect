@@ -10,8 +10,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun TopBar() {
     TopAppBar(
@@ -41,19 +48,31 @@ fun BusinessListItem(business: Business, onItemClick: (Business) -> Unit) {
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .clickable { onItemClick(business) }
+            .clickable { onItemClick(business) },
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = business.name,
-                style = MaterialTheme.typography.titleMedium
+            Icon(
+                imageVector = Icons.Outlined.Storefront,
+                contentDescription = "Business Category",
+                tint = MaterialTheme.colorScheme.primary
             )
-            Text(
-                text = business.category,
-                style = MaterialTheme.typography.bodySmall
-            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = business.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = business.category,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
