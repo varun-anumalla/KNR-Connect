@@ -8,11 +8,9 @@ This project is a comprehensive portfolio piece, engineered to solve a real-worl
 
 ## 📸 App Screenshots
 
-| Home Screen & Search | Details Screen |
-| :---: | :---: |
-| _(Your Screenshot Here)_ | _(Your Screenshot Here)_ |
-| **Favorites & Settings** | **Light & Dark Mode** |
-| _(Your Screenshot Here)_ | _(Your Screenshot Here)_ |
+| Home Screen | Details Screen | Favorites Screen | Settings Screen |
+| :---: | :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/e82125ea-b479-4370-954f-b75664cc5a0f" alt="Home Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/86fd3ab0-d3a2-4f55-8bac-0fb309155498" alt="Details Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/7b66d815-6513-40ff-b5af-bb1cef7f6e4e" alt="Favorites Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/84775261-ed02-42e8-b23e-e32761c6f76e" alt="Settings Screen" width="200"/> |
 
 ---
 
