@@ -46,11 +46,11 @@ This project was engineered using professional best practices to demonstrate rea
 
 ---
 
-## 🚀 The Development Journey
+## 🚀 The Development Journey:
 
 This project's development was a realistic engineering journey that required overcoming numerous real-world obstacles, including:
 * Resolving stubborn IDE caching bugs that required invalidating caches and performing clean builds.
 * Debugging silent data loading failures caused by database schema mismatches and race conditions.
 * Diagnosing and fixing broken API links and JSON syntax errors using `Logcat` and detailed error analysis.
 
-Successfully navigating these challenges was a critical part of the process, proving my ability to debug, problem-solve, and build a stable, resilient application..
+Successfully navigating these challenges was a critical part of the process, proving my ability to debug, problem-solve, and build a stable, resilient application.
