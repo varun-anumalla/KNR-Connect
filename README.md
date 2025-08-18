@@ -1,6 +1,6 @@
 # KNR Connect: A Local Business Connection Platform
 
-**Tagline:** *A modern Android application designed to bridge the gap between the community and local businesses in Karimnagar, Connecting the community of Karimnagar with local businesses built with a professional-grade tech stack.*
+ *A modern Android application designed to bridge the gap between the community and local businesses in Karimnagar, Connecting the community of Karimnagar with local businesses built with a professional-grade tech stack.*
 
 This project is a comprehensive portfolio piece, engineered to solve a real-world problem while demonstrating a mastery of modern Android development principles. The core mission is to provide a clean, reliable, and fast way for the local community to find and directly connect with essential businesses.
 
