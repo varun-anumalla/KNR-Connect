@@ -1,11 +1,15 @@
 package com.example.knrconnect
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -16,50 +20,49 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.knrconnect.ui.theme.Green
 import androidx.core.net.toUri
+import coil.compose.AsyncImage
+import com.example.knrconnect.ui.theme.Green
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(viewModel: DetailsViewModel, onNavigateBack: () -> Unit) {
     val business by viewModel.business.collectAsState()
 
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 4.dp, top = 8.dp, bottom = 8.dp)
-            ) {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
-                    )
-                }
-            }
+            TopAppBar(
+                title = { /* No title */ },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
         }
     ) { padding ->
         business?.let { b ->
+            // A regular Column that is scrollable
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()) // This makes the whole screen scrollable
             ) {
+                // Title and Favorite Button
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = b.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Text(b.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                     IconButton(onClick = { viewModel.toggleFavorite() }) {
                         Icon(
                             imageVector = if (b.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -69,84 +72,98 @@ fun DetailsScreen(viewModel: DetailsViewModel, onNavigateBack: () -> Unit) {
                         )
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Address",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = b.address,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                // Address Info
+                Text("Address", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(b.address, style = MaterialTheme.typography.bodyLarge)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = b.category,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
+                Text(b.category, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.secondary)
                 Spacer(modifier = Modifier.height(32.dp))
 
+                // Action Buttons
                 ActionButtons(b)
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Image Gallery - ONLY shows if imageUrls is not empty
+                if (b.imageUrls.isNotEmpty()) {
+                    ImageGallery(imageUrls = b.imageUrls)
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+
+                // Description - ONLY shows if description is not blank
+                if (b.description.isNotBlank()) {
+                    DescriptionSection(description = b.description)
+                }
+
+                Spacer(modifier = Modifier.height(24.dp)) //  padding at the bottom
             }
         }
     }
 }
 
-  // Row for text Buttons.
+@Composable
+private fun ImageGallery(imageUrls: List<String>) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        items(imageUrls) { imageUrl ->
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = "Business Image",
+                modifier = Modifier
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop,
+            )
+        }
+    }
+}
 
-@SuppressLint("UseKtx")
+@Composable
+private fun DescriptionSection(description: String) {
+    Column {
+        Text(
+            text = "Description",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+
 @Composable
 private fun ActionButtons(business: Business) {
     val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
-        // Call Button
-        Button(
-            onClick = {
-                val intent = Intent(Intent.ACTION_DIAL).apply {
-                    "tel:${business.phone}".toUri().also { data = it }
-                }
-                context.startActivity(intent)
-            }
-        ) {
-            Text("Call")
-        }
+        Button(onClick = {
+            val intent = Intent(Intent.ACTION_DIAL, "tel:${business.phone}".toUri())
+            context.startActivity(intent)
+        }) { Text("Call") }
 
-        // WhatsApp Button
         Button(
             onClick = { openWhatsApp(context, business.phone) },
-            colors = ButtonDefaults.buttonColors(containerColor = Green) // Using the Green color
-        ) {
-            Text("WhatsApp")
-        }
+            colors = ButtonDefaults.buttonColors(containerColor = Green)
+        ) { Text("WhatsApp") }
 
-        // Directions Button
-        Button(
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(business.mapLink))
-                context.startActivity(intent)
-            }
-        ) {
-            Text("Directions")
-        }
+        Button(onClick = {
+            val intent = Intent(Intent.ACTION_VIEW, business.mapLink.toUri())
+            context.startActivity(intent)
+        }) { Text("Directions") }
     }
 }
 
-
 private fun openWhatsApp(context: Context, phone: String) {
-
     val completePhone = if (phone.startsWith("+")) phone else "+91$phone"
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        data = "https://api.whatsapp.com/send?phone=$completePhone".toUri()
-        setPackage("com.whatsapp")
-    }
+    val intent = Intent(Intent.ACTION_VIEW, "https://api.whatsapp.com/send?phone=$completePhone".toUri())
+    intent.setPackage("com.whatsapp")
     try {
         context.startActivity(intent)
     } catch (e: Exception) {

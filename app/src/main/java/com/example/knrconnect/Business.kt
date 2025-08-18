@@ -22,6 +22,8 @@ class Converters {
 data class Business(
     @PrimaryKey val name: String,
     val category: String,
+    val description: String,
+    val imageUrls: List<String>,
     val address: String,
     val phone: String,
     val mapLink: String,

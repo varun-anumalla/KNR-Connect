@@ -39,7 +39,7 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
             initialValue = emptyList()
         )
 
-    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/3d267c11b46e7ce26bd1b9e440db07a907d1016a/knr-data.json"
+    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/4f32910806c2a4de0b261228dd84064935f187c6/knr-data.json"
 
     init {
         viewModelScope.launch {
