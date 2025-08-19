@@ -118,8 +118,8 @@ private fun ImageGallery(imageUrls: List<String>) {
 
             Box( // This outer Box is for clipping the corners
                 modifier = Modifier
-                    .height(200.dp)
-                    .aspectRatio(16 / 9f)
+                    .height(270.dp)
+                    .aspectRatio(1 / 1f)
                     .clip(RoundedCornerShape(16.dp))
             ) {
                 AsyncImage( // The actual image, which is always present
