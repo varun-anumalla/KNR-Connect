@@ -2,7 +2,6 @@ package com.example.knrconnect
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -29,6 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.knrconnect.ui.theme.Green
+import com.valentinilk.shimmer.shimmer
+import androidx.compose.foundation.background
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import coil.compose.AsyncImagePainter
+import com.example.knrconnect.ui.theme.MidGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,14 +113,34 @@ private fun ImageGallery(imageUrls: List<String>) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(imageUrls) { imageUrl ->
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = "Business Image",
+            // Coil's AsyncImage can tell us if it's loading
+            var isLoading by remember { mutableStateOf(true) }
+
+            Box( // This outer Box is for clipping the corners
                 modifier = Modifier
                     .height(200.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop,
-            )
+                    .aspectRatio(16 / 9f)
+                    .clip(RoundedCornerShape(16.dp))
+            ) {
+                AsyncImage( // The actual image, which is always present
+                    model = imageUrl,
+                    contentDescription = "Business Image",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    onState = { state ->
+                        // The shimmer is turned off when the image is loaded or fails
+                        isLoading = state is AsyncImagePainter.State.Loading
+                    }
+                )
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .shimmer()
+                            .background(MidGray.copy(alpha = 0.5f))
+                    )
+                }
+            }
         }
     }
 }

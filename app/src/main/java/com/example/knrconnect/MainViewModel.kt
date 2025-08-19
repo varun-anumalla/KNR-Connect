@@ -1,6 +1,5 @@
 package com.example.knrconnect
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
@@ -11,6 +10,9 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
@@ -18,10 +20,6 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val businesses: StateFlow<List<Business>> = repository.businesses
-        .onEach { businessList ->
-
-            Log.d("KNR_DEBUG_VM", "Business list received from repository with size: ${businessList.size}")
-        }
         .combine(searchQuery) { businessList, query ->
             if (query.isBlank()) {
                 businessList
@@ -39,32 +37,46 @@ class MainViewModel(private val repository: BusinessRepository) : ViewModel() {
             initialValue = emptyList()
         )
 
-    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/4f32910806c2a4de0b261228dd84064935f187c6/knr-data.json"
+    private val apiUrl = "https://gist.githubusercontent.com/varun-anumalla/e8273cd857207fb1102811c05331eeb6/raw/75c35ec90932cbd526a9c4fac7b282d4a45bb1e9/knr-data.json"
 
     init {
         viewModelScope.launch {
             repository.initialize()
-            fetchBusinesses()
+            fetchBusinesses(isInitialLoad = true)
         }
     }
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }
+
     fun onClearSearchQuery() {
         _searchQuery.value = ""
     }
 
-    private fun fetchBusinesses() {
+    // Public function for the UI to call
+    fun refreshData() {
+        fetchBusinesses(isInitialLoad = false)
+    }
+
+    private fun fetchBusinesses(isInitialLoad: Boolean) {
         viewModelScope.launch {
-            _isLoading.value = true
+            if (isInitialLoad) {
+                _isLoading.value = true
+            } else {
+                _isRefreshing.value = true
+            }
             _error.value = null
             try {
                 repository.refreshBusinesses(apiUrl)
             } catch (e: Exception) {
                 _error.value = "Failed to load data."
             } finally {
-                _isLoading.value = false
+                if (isInitialLoad) {
+                    _isLoading.value = false
+                } else {
+                    _isRefreshing.value = false
+                }
             }
         }
     }
