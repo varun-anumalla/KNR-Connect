@@ -10,7 +10,12 @@ This project is a comprehensive portfolio piece, engineered to solve a real-worl
 
 | Home Screen | Details Screen | Favorites Screen | Settings Screen |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/e82125ea-b479-4370-954f-b75664cc5a0f" alt="Home Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/86fd3ab0-d3a2-4f55-8bac-0fb309155498" alt="Details Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/7b66d815-6513-40ff-b5af-bb1cef7f6e4e" alt="Favorites Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/84775261-ed02-42e8-b23e-e32761c6f76e" alt="Settings Screen" width="200"/> |
+| <img src="https://github.com/user-attachments/assets/e82125ea-b479-4370-954f-b75664cc5a0f" alt="Home Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/e687423a-d826-41f2-8764-df0622f2f43e" alt="Details Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/7b66d815-6513-40ff-b5af-bb1cef7f6e4e" alt="Favorites Screen" width="200"/> | <img src="https://github.com/user-attachments/assets/84775261-ed02-42e8-b23e-e32761c6f76e" alt="Settings Screen" width="200"/> |
+
+
+**App Demo (GIF):**
+ | :---: |
+<img src="https://github.com/varun-anumalla/KNR-Connect/blob/master/_KNR_Connect_GIF%20(1).gif?raw=true" width="200">
 
 ---
 
@@ -21,6 +26,9 @@ This project is a comprehensive portfolio piece, engineered to solve a real-worl
     * 📞 **Call** the business.
     * 📱 Open a **WhatsApp** chat.
     * 🗺️ Get **Directions** via Google Maps.
+    * A **horizontally scrolling image gallery** to showcase business photos.
+    * A dedicated **description section** to provide more information.
+    * **Skeleton Loaders:** A professional, shimmering placeholder is shown while images are loading, improving the user experience.
 * **Persistent Favorites:** Users can mark businesses as favorites, with choices saved permanently on the device's local database.
 * **Modern UI & UX:**
     * A professional bottom navigation bar for seamless screen transitions.
@@ -41,6 +49,7 @@ This project was engineered using professional best practices to demonstrate rea
     * **UI:** Built entirely with **Jetpack Compose**, the modern, declarative UI toolkit for Android.
     * **Networking:** Uses **Retrofit** to communicate with a live API (a GitHub Gist) to fetch and parse JSON data.
     * **Database:** Integrated a **Room Database** for local data persistence, enabling offline access and powering the favorites system.
+    * **Image Loading:**  Uses **Coil**  (Coroutine Image Loader) the modern, Google-recommended library for loading images from the internet efficiently.
     * **Asynchronous Programming:** All network and database operations are handled efficiently in the background using **Kotlin Coroutines and Flow**, ensuring the app's UI never freezes.
     * **Navigation:** Implemented a robust, multi-screen architecture using **Compose Navigation**.
 
@@ -49,6 +58,8 @@ This project was engineered using professional best practices to demonstrate rea
 ## 🚀 The Development Journey:
 
 This project's development was a realistic engineering journey that required overcoming numerous real-world obstacles, including:
+
+* Integrating Rich Content: Engineered the UI to gracefully handle dynamic image loading and variable-length descriptions without sacrificing performance or breaking the layout, ensuring a smooth user experience.
 * Resolving stubborn IDE caching bugs that required invalidating caches and performing clean builds.
 * Debugging silent data loading failures caused by database schema mismatches and race conditions.
 * Diagnosing and fixing broken API links and JSON syntax errors using `Logcat` and detailed error analysis.
