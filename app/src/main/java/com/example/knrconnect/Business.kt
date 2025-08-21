@@ -17,6 +17,18 @@ class Converters {
     }
 }
 
+/**
+ *
+ * @property name The unique name of the business (Primary Key).
+ * @property category The category the business belongs to (e.g., "Restaurant", "Hospital").
+ * @property address The physical address of the business.
+ * @property phone The contact phone number for the business.
+ * @property mapLink A URL link to the business's location on Google Maps.
+ * @property tags A list of hidden keywords used for searching (e.g., "biryani", "doctor" , "food").
+ * @property isFavorite A boolean flag indicating if the user has marked this business as a favorite.
+ */
+
+
 @Entity(tableName = "businesses")
 @TypeConverters(Converters::class)
 data class Business(
