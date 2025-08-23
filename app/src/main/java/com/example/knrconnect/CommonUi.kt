@@ -18,7 +18,9 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 @OptIn(ExperimentalMaterial3Api::class)
-
+/**
+ * A reusable TopAppBar composable for the main screens of the app.
+ */
 @Composable
 fun TopBar() {
     TopAppBar(
@@ -29,7 +31,12 @@ fun TopBar() {
         )
     )
 }
-
+/**
+ * A reusable LazyColumn for displaying a list of businesses.
+ *
+ * @param businesses The list of [Business] objects to display.
+ * @param onItemClick A lambda function to be invoked when a business item is clicked.
+ */
 @Composable
 fun BusinessList(businesses: List<Business>, onItemClick: (Business) -> Unit) {
     LazyColumn {
@@ -41,7 +48,12 @@ fun BusinessList(businesses: List<Business>, onItemClick: (Business) -> Unit) {
         }
     }
 }
-
+/**
+ * A reusable Card composable that displays a single business item in a list.
+ *
+ * @param business The [Business] object to display.
+ * @param onItemClick A lambda function to be invoked when the card is clicked.
+ */
 @Composable
 fun BusinessListItem(business: Business, onItemClick: (Business) -> Unit) {
     Card(
