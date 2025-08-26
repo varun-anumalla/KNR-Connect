@@ -10,7 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-
+/**
+ * A composable screen that provides app settings for the user.
+ *
+ * This screen allows the user to toggle dark mode, clear all their saved favorites,
+ * and view information about the application.
+ *
+ * @param settingsViewModel The ViewModel for handling settings-related actions like clearing favorites.
+ * @param themeViewModel The ViewModel for managing the app's theme state (light/dark mode).
+ */
 @Composable
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
