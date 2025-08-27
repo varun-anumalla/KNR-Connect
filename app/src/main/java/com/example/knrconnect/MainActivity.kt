@@ -26,13 +26,25 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
 import com.example.knrconnect.ui.theme.KNRConnectTheme
 
+/**
+ * Represents an item in the bottom navigation bar.
+ *
+ * @property route The navigation route associated with this item.
+ * @property label The text label for the item.
+ * @property selectedIcon The icon to display when the item is selected.
+ * @property unselectedIcon The icon to display when the item is not selected.
+ */
+
 data class NavItem(
     val route: String,
     val label: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 )
-
+/**
+ * The main and only activity for the KNR Connect application.
+ * It is responsible for setting up the theme, database, repository, and the main UI shell.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +60,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * The main UI shell of the application.
+ * This composable sets up the Scaffold, TopAppBar, BottomNavigationBar, and the NavHost
+ * which controls all screen navigation.
+ *
+ * @param repository The app's single source of truth for data.
+ * @param themeViewModel The ViewModel that manages the app's theme.
+ */
 
 @Composable
 fun AppShell(repository: BusinessRepository, themeViewModel: ThemeViewModel) {
